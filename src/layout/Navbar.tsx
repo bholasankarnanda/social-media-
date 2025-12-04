@@ -11,14 +11,25 @@ import {
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import HomeIcon from "@mui/icons-material/Home";
+// Import Icons for Dark Mode
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
-// --- Styled Components for Search Bar ---
+// Import Redux Hooks
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../features/theme/themeSlice";
+
+import type { RootState } from "../store/store";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#EEF3F8",
+  backgroundColor: theme.palette.mode === "light" ? "#EEF3F8" : "#38434f",
   "&:hover": {
-    backgroundColor: alpha("#EEF3F8", 0.8),
+    backgroundColor:
+      theme.palette.mode === "light"
+        ? alpha("#EEF3F8", 0.8)
+        : alpha("#38434f", 0.8),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -53,13 +64,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// --- Main Component ---
 export default function Navbar() {
+  const dispatch = useDispatch();
+  const mode = useSelector((state: RootState) => state.theme.mode);
+
   return (
     <AppBar position="sticky">
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ minHeight: "52px !important" }}>
-          {/* Logo */}
           <Typography
             variant="h4"
             noWrap
@@ -73,7 +85,6 @@ export default function Navbar() {
           >
             Sync-Book
           </Typography>
-          {/* Mobile Logo Fallback */}
           <Typography
             variant="h5"
             noWrap
@@ -101,17 +112,20 @@ export default function Navbar() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* Icons Menu (Hidden on very small screens, simpler version) */}
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
+            <IconButton onClick={() => dispatch(toggleTheme())} color="inherit">
+              {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
+
             <IconButton
               color="inherit"
               sx={{
                 display: { xs: "none", md: "flex" },
                 flexDirection: "column",
+                fontSize: "40px",
               }}
             >
               <HomeIcon />
-              <Typography variant="caption">Home</Typography>
             </IconButton>
 
             {/* Profile */}

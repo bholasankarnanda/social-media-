@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import {
   ThemeProvider,
   CssBaseline,
@@ -6,17 +7,26 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { appTheme } from "./theme/theme";
+import { Provider, useSelector } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store/store";
+import type { RootState } from "./store/store";
+
+import { createAppTheme } from "./theme/theme";
 import Layout from "./layout/Layout";
-const App = () => {
+
+// Wrapper component to access Redux state for Theme
+const ThemeWrapper = () => {
+  const mode = useSelector((state: RootState) => state.theme.mode);
+
+  // Memoize theme creation so it only runs when mode changes
+  const theme = useMemo(() => createAppTheme(mode), [mode]);
+
   return (
-    // <Provider store={store}>
-    <ThemeProvider theme={appTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Layout>
         {/* --- THIS IS THE CENTER FEED SECTION --- */}
-
-        {/* 1. "Start a Post" Input Box */}
         <Card sx={{ mb: 2 }}>
           <CardContent sx={{ display: "flex", gap: 2 }}>
             <Box
@@ -30,13 +40,14 @@ const App = () => {
             <Box
               sx={{
                 flexGrow: 1,
-                border: "1px solid #ccc",
+                border: "1px solid",
+                borderColor: "divider",
                 borderRadius: 10,
                 display: "flex",
                 alignItems: "center",
                 pl: 2,
                 cursor: "pointer",
-                "&:hover": { bgcolor: "#f0f0f0" },
+                "&:hover": { bgcolor: "action.hover" },
               }}
             >
               <Typography
@@ -50,18 +61,28 @@ const App = () => {
           </CardContent>
         </Card>
 
-        {/* 2. Example Feed Content (Your Redux Posts will go here) */}
         <Card>
           <CardContent>
             <Typography variant="h6">Post Title</Typography>
             <Typography variant="body2" color="text.secondary">
-              This area is the "children" prop of the Layout. Your infinite
-              scroll list will render here.
+              This area is the "children" prop of the Layout. Infinite scroll
+              list will render here.
             </Typography>
           </CardContent>
         </Card>
       </Layout>
     </ThemeProvider>
+  );
+};
+
+// Main App Component
+const App = () => {
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeWrapper />
+      </PersistGate>
+    </Provider>
   );
 };
 
