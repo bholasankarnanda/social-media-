@@ -21,6 +21,15 @@ import { toggleTheme } from "../features/theme/themeSlice";
 
 import type { RootState } from "../store/store";
 
+// logo design style
+const LogoImage = styled("img")(({ theme }) => ({
+  height: "32px",
+  width: "auto",
+  marginRight: theme.spacing(1),
+  display: "block",
+}));
+
+// Search style
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -40,6 +49,7 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
+// Search Input style
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -72,8 +82,9 @@ export default function Navbar() {
     <AppBar position="sticky">
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ minHeight: "52px !important" }}>
+          <LogoImage src="/Imges/logo.png" alt="Sync-Book Logo" />
           <Typography
-            variant="h4"
+            variant="h5"
             noWrap
             component="div"
             sx={{
@@ -83,20 +94,7 @@ export default function Navbar() {
               mr: 1,
             }}
           >
-            Sync-Book
-          </Typography>
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            sx={{
-              display: { xs: "block", sm: "none" },
-              color: "primary.main",
-              fontWeight: "bold",
-              mr: 1,
-            }}
-          >
-            SB
+            SyncBook
           </Typography>
 
           {/* Search Bar */}
@@ -122,7 +120,6 @@ export default function Navbar() {
               sx={{
                 display: { xs: "none", md: "flex" },
                 flexDirection: "column",
-                fontSize: "40px",
               }}
             >
               <HomeIcon />
