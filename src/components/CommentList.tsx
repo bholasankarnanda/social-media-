@@ -1,6 +1,7 @@
 // CommentList.tsx
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   Box,
   TextField,
@@ -10,27 +11,29 @@ import {
   Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { addComment, deleteComment } from "../features/Comments/CommentSlice";
-import type { Comment } from "../features/Comments/CommentSlice";
-import type { RootState, AppDispatch } from "../store/store";
+
+import {
+  addComment,
+  deleteComment,
+  selectCommentsByPost, // <-- optimized selector
+} from "../features/Comments/CommentSlice";
+
+import type { AppDispatch } from "../store/store";
 
 interface CommentListProps {
-  postId: string; // to allow multiple posts
+  postId: string;
 }
 
 const CommentList: React.FC<CommentListProps> = ({ postId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [text, setText] = useState("");
 
-  // Get comments for this post
-  const comments: Comment[] = useSelector((state: RootState) => {
-    const ids = state.comments.idsByPost[postId] || [];
-    return ids.map((id) => state.comments.byId[id]);
-  });
+  // ✅ Optimized memoized selector (no warn, no rerenders)
+  const comments = useSelector(selectCommentsByPost(postId));
 
   // Add comment
   const handleAddComment = (): void => {
-    if (text.trim() === "") return;
+    if (!text.trim()) return;
     dispatch(addComment({ postId, text }));
     setText("");
   };
@@ -42,7 +45,7 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
 
   return (
     <Box sx={{ mt: 2 }}>
-      {/* Input for new comment */}
+      {/* Input */}
       <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
           fullWidth
@@ -57,7 +60,7 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
         </Button>
       </Box>
 
-      {/* Comments list */}
+      {/* Comment List */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         {comments.map((comment) => (
           <Paper
@@ -70,12 +73,16 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
             }}
           >
             <Box>
+              {/* User Name */}
               <Typography variant="subtitle2">Pavan</Typography>
+
               <Typography variant="body2">{comment.text}</Typography>
+
               <Typography variant="caption" color="text.secondary">
                 {new Date(comment.createdAt).toLocaleTimeString()}
               </Typography>
             </Box>
+
             <IconButton
               size="small"
               color="error"
@@ -86,6 +93,7 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
           </Paper>
         ))}
 
+        {/* No comments message */}
         {comments.length === 0 && (
           <Typography variant="body2" color="text.secondary">
             No comments yet.
