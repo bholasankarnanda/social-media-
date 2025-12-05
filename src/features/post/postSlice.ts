@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export interface Post {
+  id: string;
   title: string;
   description: string;
   image: string;
@@ -19,17 +20,18 @@ export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    addPost: (state, action: PayloadAction<Omit<Post, "likes">>) => {
+    addPost: (state, action: PayloadAction<Omit<Post, "likes" | "id">>) => {
       state.posts.push({
+        id: crypto.randomUUID(), // auto unique id
         ...action.payload,
         likes: 0,
       });
     },
 
-    likePost: (state, action: PayloadAction<number>) => {
-      const index = action.payload;
-      if (state.posts[index]) {
-        state.posts[index].likes += 1;
+    likePost: (state, action: PayloadAction<string>) => {
+      const post = state.posts.find((p) => p.id === action.payload);
+      if (post) {
+        post.likes += 1;
       }
     },
   },

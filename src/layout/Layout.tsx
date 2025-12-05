@@ -8,6 +8,24 @@ interface LayoutProps {
   children: ReactNode;
 }
 
+const newsData = [
+  {
+    title: "React 19 Released",
+    category: "Top news",
+    readers: "10,934 readers",
+  },
+  {
+    title: "Tech Hiring Trends",
+    category: "Hiring",
+    readers: "5,211 readers",
+  },
+  {
+    title: "Redux Toolkit Updates",
+    category: "Tech",
+    readers: "2,099 readers",
+  },
+];
+
 export default function Layout({ children }: LayoutProps) {
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
@@ -45,33 +63,17 @@ export default function Layout({ children }: LayoutProps) {
                 News
               </Typography>
               <ul style={{ paddingLeft: 20, margin: 0, fontSize: "14px" }}>
-                <li>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>React 19 Released</strong>
-                    <br />
-                    <Typography variant="caption" color="text.secondary">
-                      Top news • 10,934 readers
+                {newsData.map((item, index) => (
+                  <li key={index}>
+                    <Typography variant="body2" sx={{ mb: 1 }}>
+                      <strong>{item.title}</strong>
+                      <br />
+                      <Typography variant="caption" color="text.secondary">
+                        {item.category} • {item.readers}
+                      </Typography>
                     </Typography>
-                  </Typography>
-                </li>
-                <li>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>Tech Hiring Trends</strong>
-                    <br />
-                    <Typography variant="caption" color="text.secondary">
-                      Hiring • 5,211 readers
-                    </Typography>
-                  </Typography>
-                </li>
-                <li>
-                  <Typography variant="body2">
-                    <strong>Redux Toolkit Updates</strong>
-                    <br />
-                    <Typography variant="caption" color="text.secondary">
-                      Tech • 2,099 readers
-                    </Typography>
-                  </Typography>
-                </li>
+                  </li>
+                ))}
               </ul>
             </Box>
           </Grid>
