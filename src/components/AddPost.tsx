@@ -85,6 +85,7 @@ const AddPost = () => {
               sx={{ mb: 2 }}
               autoComplete="off"
               onChange={(e) => setTitle(e.target.value)}
+              required
             />
 
             {/* Description */}
@@ -99,6 +100,7 @@ const AddPost = () => {
                 sx: { fontSize: "1.2rem", lineHeight: "1.7rem" },
               }}
               onChange={(e) => setDescription(e.target.value)}
+              required
             />
 
             {/* Image upload */}
