@@ -13,10 +13,12 @@ import storage from "redux-persist/lib/storage";
 
 import themeReducer from "../features/theme/themeSlice";
 import postReducer from "../features/post/postSlice";
+import commentReducer from "../features/Comments/CommentSlice";
 
 const rootReducer = combineReducers({
   theme: themeReducer,
   post: postReducer,
+  comments: commentReducer,
 });
 
 const persistConfig = {

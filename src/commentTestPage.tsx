@@ -1,30 +1,75 @@
-// CommentTestPage.tsx
-import React from "react";
-import { Box, Typography, Paper } from "@mui/material";
-import CommentList from "./components/CommentList";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
-// // Temporary post ID for frontend-only testing
-// const TEMP_POST_ID = "temp-post";
+// ----------------------------------------------------
+// Types
+// ----------------------------------------------------
+export interface Comment {
+  id: string;
+  postId: string;
+  text: string;
+  createdAt: string;
+}
 
-const CommentTestPage: React.FC = () => {
-  return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h5" gutterBottom>
-        Comment Test Page
-      </Typography>
+export interface CommentsState {
+  byId: Record<string, Comment>;
+  idsByPost: Record<string, string[]>;
+}
 
-      {/* Simulated post */}
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Typography variant="subtitle1">This is a test post</Typography>
-        <Typography variant="body2" color="text.secondary">
-          Post content goes here. Add and delete comments below.
-        </Typography>
-      </Paper>
-
-      {/* Comment list for this post */}
-      <CommentList />
-    </Box>
-  );
+const initialState: CommentsState = {
+  byId: {},
+  idsByPost: {},
 };
 
-export default CommentTestPage;
+// ----------------------------------------------------
+// Slice
+// ----------------------------------------------------
+const commentSlice = createSlice({
+  name: "comments",
+  initialState,
+  reducers: {
+    addComment: (
+      state,
+      action: PayloadAction<{ postId: string; text: string }>
+    ) => {
+      const { postId, text } = action.payload;
+
+      const id = nanoid();
+      const newComment: Comment = {
+        id,
+        postId,
+        text,
+        createdAt: new Date().toISOString(),
+      };
+
+      state.byId[id] = newComment;
+
+      if (!state.idsByPost[postId]) {
+        state.idsByPost[postId] = [];
+      }
+
+      state.idsByPost[postId].push(id);
+    },
+
+    deleteComment: (
+      state,
+      action: PayloadAction<{ postId: string; id: string }>
+    ) => {
+      const { postId, id } = action.payload;
+
+      delete state.byId[id];
+
+      if (state.idsByPost[postId]) {
+        state.idsByPost[postId] = state.idsByPost[postId].filter(
+          (cid) => cid !== id
+        );
+      }
+    },
+  },
+});
+
+// Export actions
+export const { addComment, deleteComment } = commentSlice.actions;
+
+// Export reducer for store
+export default commentSlice.reducer;

@@ -1,9 +1,7 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-// ----------------------------------------------------
 // Types
-// ----------------------------------------------------
 export interface Comment {
   id: string;
   postId: string;
@@ -21,9 +19,8 @@ const initialState: CommentsState = {
   idsByPost: {},
 };
 
-// ----------------------------------------------------
-// Slice
-// ----------------------------------------------------
+// Creating Slice
+
 const commentSlice = createSlice({
   name: "comments",
   initialState,
