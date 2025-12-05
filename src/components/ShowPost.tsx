@@ -133,7 +133,7 @@ const ShowPost: React.FC = () => {
               <Typography>Comment</Typography>
             </Box>
 
-            {/* save or bookmark section started from here  */}
+              {/* save or bookmark section started from here  */}
             <Box
               sx={{
                 display: "flex",
