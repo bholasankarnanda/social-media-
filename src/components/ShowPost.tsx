@@ -35,7 +35,7 @@ const ShowPost: React.FC = () => {
     }, 0);
   }
 }, []);
-        
+         
 
   const handleBookmark = (post: Post) => {
     const isSaved = bookmarks.some((p) => p.title === post.title && p.description === post.description);
