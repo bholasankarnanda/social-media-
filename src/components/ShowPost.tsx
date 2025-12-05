@@ -2,38 +2,27 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../features/post/postSlice";
 import type { RootState, AppDispatch } from "../store/store";
-import type { Post } from "../features/post/postSlice"; // keep if you export Post type from your slice
+import type { Post } from "../features/post/postSlice";
 
 import { Box, Card, Typography, Avatar, Stack, Divider } from "@mui/material";
 
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import CommentList from "../components/CommentList";
-import { useState } from "react";
+import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 
-/**
- * If your postSlice DOES NOT export a Post type, replace the import above with:
- *
- * interface Post {
- *   id: string;
- *   title: string;
- *   description: string;
- *   image?: string;
- *   likes: number;
- * }
- *
- * (But if you already export Post from your slice, keep the import.)
- */
+import CommentList from "../components/CommentList";
+
+// ----------------------------------------------------
 
 const ShowPost: React.FC = () => {
-  const data = useSelector((state: RootState) => state.post.posts);
+  const posts = useSelector((state: RootState) => state.post.posts);
+  const searchQuery = useSelector((state: RootState) => state.search.query);
   const dispatch = useDispatch<AppDispatch>();
 
-  // store open post id instead of INDEX
   const [openPostId, setOpenPostId] = useState<string | null>(null);
 
-  // Bookmarks stored in localStorage (lazy init so no useEffect needed)
+  // Initialize bookmarks safely
   const [bookmarks, setBookmarks] = useState<Post[]>(() => {
     try {
       const stored = localStorage.getItem("bookmarks");
@@ -43,24 +32,28 @@ const ShowPost: React.FC = () => {
     }
   });
 
-  // Toggle bookmark and persist to localStorage
+  // Save bookmarks to localStorage
   const handleBookmark = (post: Post) => {
     const isSaved = bookmarks.some((p) => p.id === post.id);
+
     const updated = isSaved
       ? bookmarks.filter((p) => p.id !== post.id)
       : [...bookmarks, post];
+
     setBookmarks(updated);
     localStorage.setItem("bookmarks", JSON.stringify(updated));
   };
 
-  // Filter posts based on search query
+  // Filter posts by search
   const filteredPosts = posts.filter((p) => {
-    const q = (searchQuery ?? "").trim().toLowerCase();
+    const q = searchQuery.trim().toLowerCase();
     return (
-      (p.title ?? "").toLowerCase().includes(q) ||
-      (p.description ?? "").toLowerCase().includes(q)
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q)
     );
   });
+
+  // ----------------------------------------------------
 
   return (
     <Box
@@ -79,15 +72,29 @@ const ShowPost: React.FC = () => {
           <Card
             key={val.id}
             sx={{
-              mt: 1,
-              fontSize: "0.9rem",
-              color: "gray",
+              width: "100%",
+              maxWidth: 650,
+              mb: 4,
+              p: 2,
+              borderRadius: 3,
+              boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
             }}
           >
-            👍 {val.likes} likes
-          </Typography>
+            {/* Header */}
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Avatar />
+              <Box>
+                <Typography fontWeight="600">Sahil Chandrakar</Typography>
+                <Typography fontSize="0.85rem" color="gray">
+                  1w • 🌐
+                </Typography>
+              </Box>
+            </Stack>
 
-          <Divider sx={{ my: 1 }} />
+            {/* Title */}
+            <Typography sx={{ mt: 2, fontWeight: "bold", fontSize: "1.1rem" }}>
+              {val.title}
+            </Typography>
 
             {/* Description */}
             <Typography sx={{ mt: 1 }}>{val.description}</Typography>
@@ -121,7 +128,7 @@ const ShowPost: React.FC = () => {
               alignItems="center"
               sx={{ mt: 1 }}
             >
-              {/* LIKE button using ID */}
+              {/* LIKE */}
               <Box
                 onClick={() => dispatch(likePost(val.id))}
                 sx={{
@@ -132,16 +139,15 @@ const ShowPost: React.FC = () => {
                   py: 1,
                   borderRadius: 2,
                   cursor: "pointer",
-                  transition: "0.2s",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
                   userSelect: "none",
+                  "&:hover": { backgroundColor: "#f5f5f5" },
                 }}
               >
                 <ThumbUpAltOutlinedIcon fontSize="small" />
                 <Typography>Like</Typography>
               </Box>
 
-              {/* COMMENT toggle using ID */}
+              {/* COMMENT */}
               <Box
                 onClick={() =>
                   setOpenPostId(openPostId === val.id ? null : val.id)
@@ -154,9 +160,8 @@ const ShowPost: React.FC = () => {
                   py: 1,
                   borderRadius: 2,
                   cursor: "pointer",
-                  transition: "0.2s",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
                   userSelect: "none",
+                  "&:hover": { backgroundColor: "#f5f5f5" },
                 }}
               >
                 <ChatBubbleOutlineOutlinedIcon />
@@ -174,9 +179,8 @@ const ShowPost: React.FC = () => {
                   py: 1,
                   borderRadius: 2,
                   cursor: "pointer",
-                  transition: "0.2s",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
                   userSelect: "none",
+                  "&:hover": { backgroundColor: "#f5f5f5" },
                 }}
               >
                 {isSaved ? (
@@ -188,7 +192,7 @@ const ShowPost: React.FC = () => {
               </Box>
             </Stack>
 
-            {/* comment section — Now based on ID */}
+            {/* Comments */}
             {openPostId === val.id && (
               <Box sx={{ mt: 2 }}>
                 <CommentList postId={val.id} />
@@ -200,4 +204,5 @@ const ShowPost: React.FC = () => {
     </Box>
   );
 };
+
 export default ShowPost;
