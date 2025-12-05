@@ -5,12 +5,12 @@ import type { RootState, AppDispatch } from "../store/store";
 import type { Post } from "../features/post/postSlice"; // keep if you export Post type from your slice
 
 import { Box, Card, Typography, Avatar, Stack, Divider } from "@mui/material";
+
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
-
 import CommentList from "../components/CommentList";
+import { useState } from "react";
 
 /**
  * If your postSlice DOES NOT export a Post type, replace the import above with:
@@ -27,11 +27,10 @@ import CommentList from "../components/CommentList";
  */
 
 const ShowPost: React.FC = () => {
-  const posts = useSelector((state: RootState) => state.post.posts);
-  const searchQuery = useSelector((state: RootState) => state.search.query);
+  const data = useSelector((state: RootState) => state.post.posts);
   const dispatch = useDispatch<AppDispatch>();
 
-  // store open post id instead of index
+  // store open post id instead of INDEX
   const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   // Bookmarks stored in localStorage (lazy init so no useEffect needed)
@@ -80,28 +79,15 @@ const ShowPost: React.FC = () => {
           <Card
             key={val.id}
             sx={{
-              width: "100%",
-              maxWidth: 650,
-              mb: 4,
-              p: 2,
-              borderRadius: 3,
-              boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
+              mt: 1,
+              fontSize: "0.9rem",
+              color: "gray",
             }}
           >
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Avatar />
-              <Box>
-                <Typography fontWeight="600">Sahil Chandrakar</Typography>
-                <Typography fontSize="0.85rem" color="gray">
-                  1w • 🌐
-                </Typography>
-              </Box>
-            </Stack>
+            👍 {val.likes} likes
+          </Typography>
 
-            {/* Title */}
-            <Typography sx={{ mt: 2, fontWeight: "bold", fontSize: "1.1rem" }}>
-              {val.title}
-            </Typography>
+          <Divider sx={{ my: 1 }} />
 
             {/* Description */}
             <Typography sx={{ mt: 1 }}>{val.description}</Typography>
@@ -214,5 +200,4 @@ const ShowPost: React.FC = () => {
     </Box>
   );
 };
-
 export default ShowPost;
