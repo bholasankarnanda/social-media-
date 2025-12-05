@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../features/post/postSlice";
 import type { RootState, AppDispatch } from "../store/store";
+import type { Post } from "../features/post/postSlice";
 
 import { Box, Card, Typography, Avatar, Stack, Divider } from "@mui/material";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
@@ -11,20 +12,13 @@ import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 
 import CommentList from "../components/CommentList";
 
-interface Post {
-  id: string; // 🔥 added id here so TS knows it exists
-  title: string;
-  description: string;
-  image?: string;
-  likes: number;
-}
-
+// ---------- Component ----------
 const ShowPost: React.FC = () => {
   const posts = useSelector((state: RootState) => state.post.posts);
   const searchQuery = useSelector((state: RootState) => state.search.query);
   const dispatch = useDispatch<AppDispatch>();
 
-  // store open post id instead of index
+  // store open post id instead of INDEX
   const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   return (
@@ -39,7 +33,7 @@ const ShowPost: React.FC = () => {
     >
       {data.map((val: Post) => (
         <Card
-          key={val.id} // 🔥 correct key
+          key={val.id}
           sx={{
             width: "100%",
             maxWidth: 650,
@@ -128,13 +122,14 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
+                // userSelect: "none",
               }}
             >
               <ThumbUpAltOutlinedIcon fontSize="small" />
               <Typography>Like</Typography>
             </Box>
 
-            {/* 💬 COMMENT toggle using ID */}
+            {/* COMMENT toggle using ID */}
             <Box
               onClick={() =>
                 setOpenPostId(openPostId === val.id ? null : val.id)
@@ -149,6 +144,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
+                // userSelect: "none",
               }}
             >
               <ChatBubbleOutlineOutlinedIcon />
@@ -167,6 +163,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
+                // userSelect: "none",
               }}
             >
               <BookmarkBorderOutlinedIcon />
@@ -174,7 +171,7 @@ const ShowPost: React.FC = () => {
             </Box>
           </Stack>
 
-          {/* COMMENT SECTION — Now based on ID */}
+          {/* comment section — Now based on ID */}
           {openPostId === val.id && ( // Changed here
             <Box sx={{ mt: 2 }}>
               <CommentList postId={val.id} /> {/* Pass real id */}
@@ -185,5 +182,4 @@ const ShowPost: React.FC = () => {
     </Box>
   );
 };
-
 export default ShowPost;
