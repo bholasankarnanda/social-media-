@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../features/post/postSlice";
 import type { RootState, AppDispatch } from "../store/store";
+import type { Post } from "../features/post/postSlice";
 
 import { Box, Card, Typography, Avatar, Stack, Divider } from "@mui/material";
 
@@ -9,15 +10,6 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import CommentList from "../components/CommentList";
 import { useState } from "react";
-
-// ---------- Post Type ----------
-interface Post {
-  id: string; // 🔥 added id here so TS knows it exists
-  title: string;
-  description: string;
-  image?: string;
-  likes: number;
-}
 
 // ---------- Component ----------
 const ShowPost: React.FC = () => {
@@ -39,7 +31,7 @@ const ShowPost: React.FC = () => {
     >
       {data.map((val: Post) => (
         <Card
-          key={val.id} // 🔥 correct key
+          key={val.id}
           sx={{
             width: "100%",
             maxWidth: 650,
@@ -115,6 +107,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
+                userSelect: "none",
               }}
             >
               <ThumbUpAltOutlinedIcon fontSize="small" />
@@ -136,6 +129,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
+                userSelect: "none",
               }}
             >
               <ChatBubbleOutlineOutlinedIcon />
@@ -154,6 +148,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
+                userSelect: "none",
               }}
             >
               <BookmarkBorderOutlinedIcon />
