@@ -16,7 +16,7 @@ const ShowPost: React.FC = () => {
   const data = useSelector((state: RootState) => state.post.posts);
   const dispatch = useDispatch<AppDispatch>();
 
-  // store open post id instead of index
+  // store open post id instead of INDEX
   const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   return (
