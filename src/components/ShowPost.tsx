@@ -154,6 +154,8 @@ const ShowPost: React.FC = () => {
               <BookmarkBorderOutlinedIcon />
               <Typography>Save</Typography>
             </Box>
+
+            
           </Stack>
           {openPostId === index && (
             <Box sx={{ mt: 2 }}>
