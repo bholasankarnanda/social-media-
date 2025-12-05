@@ -14,10 +14,16 @@ import type { RootState } from "./store/store";
 
 import { createAppTheme } from "./theme/theme";
 import Layout from "./layout/Layout";
+import ShowPost from "./components/ShowPost";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AddPost from "./components/AddPost";
+import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 // Wrapper component to access Redux state for Theme
 const ThemeWrapper = () => {
   const mode = useSelector((state: RootState) => state.theme.mode);
+  const navigate = useNavigate();
 
   // Memoize theme creation so it only runs when mode changes
   const theme = useMemo(() => createAppTheme(mode), [mode]);
@@ -38,6 +44,7 @@ const ThemeWrapper = () => {
               }}
             />
             <Box
+              onClick={() => navigate("/add-post")}
               sx={{
                 flexGrow: 1,
                 border: "1px solid",
@@ -63,13 +70,11 @@ const ThemeWrapper = () => {
 
         <Card>
           <CardContent>
-            <Typography variant="h6">Post Title</Typography>
-            <Typography variant="body2" color="text.secondary">
-              This area is the "children" prop of the Layout. Infinite scroll
-              list will render here.
-            </Typography>
+            <ShowPost />
           </CardContent>
         </Card>
+        {/* allow /add-post to appear as modal */}
+        <Outlet />
       </Layout>
     </ThemeProvider>
   );
@@ -80,7 +85,14 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ThemeWrapper />
+        {/* wrapping for achieving routing */}
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<ThemeWrapper />}>
+              <Route path="add-post" element={<AddPost />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </PersistGate>
     </Provider>
   );
