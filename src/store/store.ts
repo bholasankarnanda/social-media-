@@ -10,12 +10,13 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+
 import themeReducer from "../features/theme/themeSlice";
-import commentReducer from "../features/Comments/CommentSlice";
+import postReducer from "../features/post/postSlice";
 
 const rootReducer = combineReducers({
   theme: themeReducer,
-  comments: commentReducer,
+  post: postReducer,
 });
 
 const persistConfig = {
@@ -38,7 +39,5 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-// --- CRITICAL: THESE LINES MUST BE HERE ---
-// This exports the "RootState" type that Navbar.tsx is looking for
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
