@@ -10,15 +10,19 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import searhchReducer from "../features/search/searchSlice";
 
 import themeReducer from "../features/theme/themeSlice";
 import postReducer from "../features/post/postSlice";
+import bookmarkReducer from "../features/search/bookmarkSlice";
 import commentReducer from "../features/Comments/CommentSlice";
 
 const rootReducer = combineReducers({
   theme: themeReducer,
   post: postReducer,
   comments: commentReducer,
+  search: searhchReducer,
+  bookmarks: bookmarkReducer,
 });
 
 const persistConfig = {
