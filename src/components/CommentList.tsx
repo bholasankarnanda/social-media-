@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {
   addComment,
   deleteComment,
-  selectCommentsByPost, //
+  selectCommentsByPost,
 } from "../features/Comments/CommentSlice";
 
 import type { AppDispatch } from "../store/store";
