@@ -7,6 +7,8 @@ import { Box, Card, Typography, Avatar, Stack, Divider } from "@mui/material";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
+import CommentList from "../components/CommentList";
+import { useState } from "react";
 
 // ---------- Post Type ----------
 interface Post {
@@ -20,6 +22,7 @@ interface Post {
 const ShowPost: React.FC = () => {
   const data = useSelector((state: RootState) => state.post.posts);
   const dispatch = useDispatch<AppDispatch>();
+  const [openPostId, setOpenPostId] = useState<number | null>(null);
 
   return (
     <Box
@@ -117,6 +120,7 @@ const ShowPost: React.FC = () => {
 
             {/* comment section started here  */}
             <Box
+              onClick={() => setOpenPostId(openPostId === index ? null : index)}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -151,6 +155,11 @@ const ShowPost: React.FC = () => {
               <Typography>Save</Typography>
             </Box>
           </Stack>
+          {openPostId === index && (
+            <Box sx={{ mt: 2 }}>
+              <CommentList postId={String(index)} />
+            </Box>
+          )}
         </Card>
       ))}
     </Box>

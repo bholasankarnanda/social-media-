@@ -11,43 +11,38 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { addComment, deleteComment } from "../features/Comments/CommentSlice";
-import type { RootState, AppDispatch } from "../store/store";
 import type { Comment } from "../features/Comments/CommentSlice";
+import type { RootState, AppDispatch } from "../store/store";
 
-// Temporary post ID for frontend-only project
-const TEMP_POST_ID = "temp-post";
+interface CommentListProps {
+  postId: string; // to allow multiple posts
+}
 
-// Simulated current user (for display only)
-const CURRENT_USER = {
-  username: "Sahil",
-};
-
-const CommentList: React.FC = () => {
+const CommentList: React.FC<CommentListProps> = ({ postId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [text, setText] = useState("");
 
-  // Select comments for the post
+  // Get comments for this post
   const comments: Comment[] = useSelector((state: RootState) => {
-    const ids = state.comments.idsByPost[TEMP_POST_ID] || [];
+    const ids = state.comments.idsByPost[postId] || [];
     return ids.map((id) => state.comments.byId[id]);
   });
 
   // Add comment
-  const handleAddComment = () => {
+  const handleAddComment = (): void => {
     if (text.trim() === "") return;
-
-    dispatch(addComment({ postId: TEMP_POST_ID, text }));
+    dispatch(addComment({ postId, text }));
     setText("");
   };
 
   // Delete comment
-  const handleDeleteComment = (id: string) => {
-    dispatch(deleteComment({ postId: TEMP_POST_ID, id }));
+  const handleDeleteComment = (id: string): void => {
+    dispatch(deleteComment({ postId, id }));
   };
 
   return (
     <Box sx={{ mt: 2 }}>
-      {/* Input box */}
+      {/* Input for new comment */}
       <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
         <TextField
           fullWidth
@@ -75,10 +70,7 @@ const CommentList: React.FC = () => {
             }}
           >
             <Box>
-              {/* Display simulated username */}
-              <Typography variant="subtitle2">
-                {CURRENT_USER.username}
-              </Typography>
+              <Typography variant="subtitle2">Pavan</Typography>
               <Typography variant="body2">{comment.text}</Typography>
               <Typography variant="caption" color="text.secondary">
                 {new Date(comment.createdAt).toLocaleTimeString()}
