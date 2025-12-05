@@ -15,7 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import {
   addComment,
   deleteComment,
-  selectCommentsByPost, // <-- optimized selector
+  selectCommentsByPost, //
 } from "../features/Comments/CommentSlice";
 
 import type { AppDispatch } from "../store/store";
@@ -28,7 +28,7 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [text, setText] = useState("");
 
-  // ✅ Optimized memoized selector (no warn, no rerenders)
+  //  Optimized memoized selector
   const comments = useSelector(selectCommentsByPost(postId));
 
   // Add comment
@@ -85,10 +85,16 @@ const CommentList: React.FC<CommentListProps> = ({ postId }) => {
 
             <IconButton
               size="small"
-              color="error"
+              sx={{
+                backgroundColor: "#f1f1f1",
+                borderRadius: "8px",
+                "&:hover": {
+                  backgroundColor: "#e0e0e0",
+                },
+              }}
               onClick={() => handleDeleteComment(comment.id)}
             >
-              <DeleteIcon fontSize="small" />
+              <DeleteIcon fontSize="small" sx={{ color: "error.main" }} />
             </IconButton>
           </Paper>
         ))}

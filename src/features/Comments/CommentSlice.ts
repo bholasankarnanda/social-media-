@@ -1,7 +1,7 @@
 // CommentSlice.ts
 import { createSlice, nanoid, createSelector } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../store/store"; // <-- IMPORTANT
+import type { RootState } from "../../store/store";
 
 export interface Comment {
   id: string;
@@ -63,8 +63,6 @@ const commentSlice = createSlice({
     },
   },
 });
-
-// MEMOIZED SELECTOR
 
 export const selectCommentsByPost = (postId: string) =>
   createSelector(
