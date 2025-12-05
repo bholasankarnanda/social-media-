@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import CommentsTestPage from "./commentTestPage";
 import {
   ThemeProvider,
   CssBaseline,
@@ -81,6 +82,7 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeWrapper />
+        <CommentsTestPage />
       </PersistGate>
     </Provider>
   );

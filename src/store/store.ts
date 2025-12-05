@@ -11,9 +11,11 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import themeReducer from "../features/theme/themeSlice";
+import commentReducer from "../features/Comments/CommentSlice";
 
 const rootReducer = combineReducers({
   theme: themeReducer,
+  comments: commentReducer,
 });
 
 const persistConfig = {
