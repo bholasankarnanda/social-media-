@@ -114,7 +114,7 @@ const ShowPost: React.FC = () => {
               <Typography>Like</Typography>
             </Box>
 
-            {/* 💬 COMMENT toggle using ID */}
+            {/* COMMENT toggle using ID */}
             <Box
               onClick={() =>
                 setOpenPostId(openPostId === val.id ? null : val.id)
@@ -156,7 +156,7 @@ const ShowPost: React.FC = () => {
             </Box>
           </Stack>
 
-          {/* COMMENT SECTION — Now based on ID */}
+          {/* comment section — Now based on ID */}
           {openPostId === val.id && ( // Changed here
             <Box sx={{ mt: 2 }}>
               <CommentList postId={val.id} /> {/* Pass real id */}
@@ -167,5 +167,4 @@ const ShowPost: React.FC = () => {
     </Box>
   );
 };
-
 export default ShowPost;
