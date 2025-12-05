@@ -150,6 +150,8 @@ const ShowPost: React.FC = () => {
               <BookmarkBorderOutlinedIcon />
               <Typography>Save</Typography>
             </Box>
+
+            
           </Stack>
         </Card>
       ))}
