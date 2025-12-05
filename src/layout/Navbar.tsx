@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AppBar,
   Toolbar,
@@ -11,17 +12,15 @@ import {
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import HomeIcon from "@mui/icons-material/Home";
-// Import Icons for Dark Mode
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 
-// Import Redux Hooks
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../features/theme/themeSlice";
-
+import { setSearchQuery } from "../features/search/searchSlice";
 import type { RootState } from "../store/store";
 
-// logo design style
+// Logo style
 const LogoImage = styled("img")(({ theme }) => ({
   height: "32px",
   width: "auto",
@@ -29,7 +28,7 @@ const LogoImage = styled("img")(({ theme }) => ({
   display: "block",
 }));
 
-// Search style
+// Search container style
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -49,7 +48,6 @@ const Search = styled("div")(({ theme }) => ({
   },
 }));
 
-// Search Input style
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -74,9 +72,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar() {
+// Use React.FC instead of JSX.Element
+const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const mode = useSelector((state: RootState) => state.theme.mode);
+  const searchQuery = useSelector((state: RootState) => state.search.query);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(e.target.value));
+  };
 
   return (
     <AppBar position="sticky">
@@ -105,6 +109,8 @@ export default function Navbar() {
             <StyledInputBase
               placeholder="Search"
               inputProps={{ "aria-label": "search" }}
+              value={searchQuery}
+              onChange={handleSearchChange} // <-- dispatches search query
             />
           </Search>
 
@@ -138,4 +144,6 @@ export default function Navbar() {
       </Container>
     </AppBar>
   );
-}
+};
+
+export default Navbar;

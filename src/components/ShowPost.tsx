@@ -1,16 +1,16 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../features/post/postSlice";
 import type { RootState, AppDispatch } from "../store/store";
 
 import { Box, Card, Typography, Avatar, Stack, Divider } from "@mui/material";
-
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import CommentList from "../components/CommentList";
-import { useState } from "react";
+import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 
-// ---------- Post Type ----------
+import CommentList from "../components/CommentList";
+
 interface Post {
   id: string; // 🔥 added id here so TS knows it exists
   title: string;
@@ -19,9 +19,9 @@ interface Post {
   likes: number;
 }
 
-// ---------- Component ----------
 const ShowPost: React.FC = () => {
-  const data = useSelector((state: RootState) => state.post.posts);
+  const posts = useSelector((state: RootState) => state.post.posts);
+  const searchQuery = useSelector((state: RootState) => state.search.query);
   const dispatch = useDispatch<AppDispatch>();
 
   // store open post id instead of index
@@ -85,15 +85,28 @@ const ShowPost: React.FC = () => {
           {/* Likes */}
           <Typography
             sx={{
-              mt: 1,
-              fontSize: "0.9rem",
-              color: "gray",
+              width: "100%",
+              maxWidth: 650,
+              mb: 4,
+              p: 2,
+              borderRadius: 3,
+              boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
             }}
           >
-            👍 {val.likes} likes
-          </Typography>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Avatar />
+              <Box>
+                <Typography fontWeight="600">Sahil Chandrakar</Typography>
+                <Typography fontSize="0.85rem" color="gray">
+                  1w • 🌐
+                </Typography>
+              </Box>
+            </Stack>
 
-          <Divider sx={{ my: 1 }} />
+            {/* Title */}
+            <Typography sx={{ mt: 2, fontWeight: "bold", fontSize: "1.1rem" }}>
+              {val.title}
+            </Typography>
 
           {/* Footer Buttons */}
           <Stack
