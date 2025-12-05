@@ -107,7 +107,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
-                userSelect: "none",
+                // userSelect: "none",
               }}
             >
               <ThumbUpAltOutlinedIcon fontSize="small" />
@@ -129,7 +129,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
-                userSelect: "none",
+                // userSelect: "none",
               }}
             >
               <ChatBubbleOutlineOutlinedIcon />
@@ -148,7 +148,7 @@ const ShowPost: React.FC = () => {
                 cursor: "pointer",
                 transition: "0.2s",
                 "&:hover": { backgroundColor: "#f5f5f5" },
-                userSelect: "none",
+                // userSelect: "none",
               }}
             >
               <BookmarkBorderOutlinedIcon />
