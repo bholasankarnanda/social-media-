@@ -12,6 +12,7 @@ import { useState } from "react";
 
 // ---------- Post Type ----------
 interface Post {
+  id: string; // 🔥 added id here so TS knows it exists
   title: string;
   description: string;
   image?: string;
@@ -22,7 +23,9 @@ interface Post {
 const ShowPost: React.FC = () => {
   const data = useSelector((state: RootState) => state.post.posts);
   const dispatch = useDispatch<AppDispatch>();
-  const [openPostId, setOpenPostId] = useState<number | null>(null);
+
+  // store open post id instead of index
+  const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   return (
     <Box
@@ -34,10 +37,9 @@ const ShowPost: React.FC = () => {
         p: 2,
       }}
     >
-      {/* displaying the data  */}
-      {data.map((val: Post, index: number) => (
+      {data.map((val: Post) => (
         <Card
-          key={index}
+          key={val.id} // 🔥 correct key
           sx={{
             width: "100%",
             maxWidth: 650,
@@ -100,8 +102,9 @@ const ShowPost: React.FC = () => {
             alignItems="center"
             sx={{ mt: 1 }}
           >
+            {/* LIKE button using ID */}
             <Box
-              onClick={() => dispatch(likePost(index))}
+              onClick={() => dispatch(likePost(val.id))} // Changed here
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -118,9 +121,11 @@ const ShowPost: React.FC = () => {
               <Typography>Like</Typography>
             </Box>
 
-            {/* comment section started here  */}
+            {/* 💬 COMMENT toggle using ID */}
             <Box
-              onClick={() => setOpenPostId(openPostId === index ? null : index)}
+              onClick={() =>
+                setOpenPostId(openPostId === val.id ? null : val.id)
+              } // Changed here
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -137,7 +142,7 @@ const ShowPost: React.FC = () => {
               <Typography>Comment</Typography>
             </Box>
 
-              {/* save or bookmark section started from here  */}
+            {/* SAVE */}
             <Box
               sx={{
                 display: "flex",
@@ -154,12 +159,12 @@ const ShowPost: React.FC = () => {
               <BookmarkBorderOutlinedIcon />
               <Typography>Save</Typography>
             </Box>
-
-            
           </Stack>
-          {openPostId === index && (
+
+          {/* COMMENT SECTION — Now based on ID */}
+          {openPostId === val.id && ( // Changed here
             <Box sx={{ mt: 2 }}>
-              <CommentList postId={String(index)} />
+              <CommentList postId={val.id} /> {/* Pass real id */}
             </Box>
           )}
         </Card>
